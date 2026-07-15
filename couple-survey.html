@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情侣深度调查问卷</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B8B',
+                        secondary: '#FF8FA3',
+                        dark: '#2D3047',
+                        light: '#FFF5F7',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                100% { transform: translateY(0px); }
+            }
+            .progress-bar {
+                transition: width 0.4s ease;
+            }
+            .form-section {
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+            .blur-bg {
+                backdrop-filter: blur(8px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-purple-50 min-h-screen font-sans text-dark">
+    <div class="container mx-auto px-4 py-8 md:py-12 max-w-3xl">
+        <!-- 页面标题区域 -->
+        <div class="text-center mb-8 md:mb-12 relative">
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-200 rounded-full mix-blend-multiply opacity-70 animate-float"></div>
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply opacity-70 animate-float" style="animation-delay: 1s;"></div>
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-4 relative">
+                <i class="fa fa-heart-o mr-2"></i>情侣深度调查问卷<i class="fa fa-heart-o ml-2"></i>
+            </h1>
+            <p class="text-gray-600 max-w-xl mx-auto relative">通过分享你们的想法，构建更亲密的情感连接。请根据你们的实际情况，选择最贴合的答案。</p>
+        </div>
+        <!-- 实时进度条组件 -->
+        <div class="mb-8 md:mb-12">
+            <div class="flex justify-between text-sm text-gray-500 mb-2 px-1">
+                <span>填写进度</span>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-primary to-secondary progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+        <!-- 问卷表单主体 -->
+        <form id="coupleSurveyForm" class="relative">
+            <!-- 装饰性背景爱心 -->
+            <div class="absolute -z-10 inset-0 overflow-hidden opacity-10">
+                <div class="absolute top-0 left-0 text-pink-300 text-6xl"><i class="fa fa-heart-o"></i></div>
+                <div class="absolute top-20 right-10 text-pink-300 text-6xl"><i class="fa fa-heart-o"></i></div>
+                <div class="absolute bottom-10 left-20 text-pink-300 text-6xl"><i class="fa fa-heart-o"></i></div>
+                <div class="absolute bottom-40 right-20 text-pink-300 text-6xl"><i class="fa fa-heart-o"></i></div>
+            </div>
+            <!-- 第一部分：基础信息 -->
+            <div class="form-section bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 mb-8 transform transition-all duration-300 hover:shadow-2xl hover:bg-opacity-90">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-white rounded-full mr-2 text-sm">1</span>
+                    基础信息
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="partner1Name" class="block text-gray-700 font-medium mb-2">你的名字/昵称</label>
+                        <input type="text" id="partner1Name" name="partner1Name" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none">
+                    </div>
+                    
+                    <div>
+                        <label for="partner2Name" class="block text-gray-700 font-medium mb-2">伴侣的名字/昵称</label>
+                        <input type="text" id="partner2Name" name="partner2Name" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none">
+                    </div>
+                    
+                    <div>
+                        <label for="relationshipDuration" class="block text-gray-700 font-medium mb-2">你们的交往时长</label>
+                        <input type="text" id="relationshipDuration" name="relationshipDuration" required placeholder="例如：2年3个月" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none">
+                    </div>
+                    
+                    <div>
+                        <label for="loveLanguage" class="block text-gray-700 font-medium mb-2">你认为你们的主要爱情语言是？（可多选）</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="loveLanguage" value="words" class="w-4 h-4 text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700">肯定的言语</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="loveLanguage" value="time" class="w-4 h-4 text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700">高质量的陪伴</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="loveLanguage" value="gifts" class="w-4 h-4 text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700">接收礼物</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="loveLanguage" value="acts" class="w-4 h-4 text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700">服务的行动</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="loveLanguage" value="touch" class="w-4 h-4 text-primary focus:ring-primary rounded">
+                                <span class="ml-2 text-gray-700">身体的接触</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 第二部分：情感沟通与表达 -->
+            <div class="form-section bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 mb-8 transform transition-all duration-300 hover:shadow-2xl hover:bg-opacity-90">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-white rounded-full mr-2 text-sm">2</span>
+                    情感沟通与表达
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="communicationFrequency" class="block text-gray-700 font-medium mb-2">你们多久进行一次“深度对话”（关于彼此关系、内心感受等）？</label>
+                        <select id="communicationFrequency" name="communicationFrequency" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none appearance-none bg-white bg-no-repeat bg-right-4" style="background-image: url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css');">
+                            <option value="" disabled selected>请选择</option>
+                            <option value="daily">每天</option>
+                            <option value="few-times-week">每周几次</option>
+                            <option value="once-week">每周一次</option>
+                            <option value="few-times-month">每月几次</option>
+                            <option value="less">很少</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="shareFeelings" class="block text-gray-700 font-medium mb-2">当你感到不安或受伤时，你会如何表达你的感受？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="shareFeelings" value="calm" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">我会冷静地直接说出我的感受和原因</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="shareFeelings" value="hint" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">我会暗示对方，希望TA能自己察觉</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="shareFeelings" value="distract" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">我会选择暂时沉默/转移注意力，等情绪平复再谈</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="shareFeelings" value="angry" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">我容易在情绪激动时表达出来，可能会指责对方</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="partnerResponse" class="block text-gray-700 font-medium mb-2">当你表达负面情绪时，你的伴侣通常会如何回应？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="partnerResponse" value="listen" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">TA会认真倾听，尝试理解我的感受</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="partnerResponse" value="solve" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">TA会直接提出解决问题的方法</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="partnerResponse" value="comfort" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">TA会安慰我，但回避问题本身</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="partnerResponse" value="defend" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">TA会为自己辩解，或反过来指责我</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="partnerResponse" value="withdraw" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">TA会沉默/退缩，不想继续讨论</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="relationshipStrength" class="block text-gray-700 font-medium mb-2">你认为你们感情中最坚固的部分是什么？</label>
+                        <textarea id="relationshipStrength" name="relationshipStrength" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label for="improveCommunication" class="block text-gray-700 font-medium mb-2">你觉得你们在沟通方面需要改进的地方是什么？</label>
+                        <textarea id="improveCommunication" name="improveCommunication" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 第三部分：相处日常与习惯 -->
+            <div class="form-section bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 mb-8 transform transition-all duration-300 hover:shadow-2xl hover:bg-opacity-90">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-white rounded-full mr-2 text-sm">3</span>
+                    相处日常与习惯
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="spendTimeTogether" class="block text-gray-700 font-medium mb-2">你们通常如何度过“二人独处时光”？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="spendTimeTogether" value="home" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">宅在家里，一起追剧、做饭或各自玩手机</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="spendTimeTogether" value="outdoors" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">会安排户外活动，如散步、旅行、逛展等</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="spendTimeTogether" value="hobby" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">一起进行双方都喜欢的爱好或运动</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="spendTimeTogether" value="relaxed" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">没有固定安排，顺其自然地放松</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="dailyRoutine" class="block text-gray-700 font-medium mb-2">你们的日常作息习惯（如起床/睡觉时间、饮食习惯）是否存在明显差异？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="dailyRoutine" value="no" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">基本一致，没有大的冲突</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dailyRoutine" value="small" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">有一些差异，但我们都能接受</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dailyRoutine" value="negotiable" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">有差异，但可以通过协商调整</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dailyRoutine" value="conflict" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">差异较大，经常因此产生矛盾</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="dealWithAnnoying" class="block text-gray-700 font-medium mb-2">当对方的习惯让你感到不舒服时，你通常会怎么做？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="dealWithAnnoying" value="discuss" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">坦诚地和对方讨论，寻找双方都舒适的方式</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dealWithAnnoying" value="tolerate" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">会默默忍受，直到自己情绪爆发</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dealWithAnnoying" value="accommodate" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">会直接指出并要求对方改变</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="dealWithAnnoying" value="adapt" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">我会尝试调整自己的心态，去适应对方</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="favoriteMoment" class="block text-gray-700 font-medium mb-2">你们在一起时，你最喜欢的时刻是什么？</label>
+                        <textarea id="favoriteMoment" name="favoriteMoment" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label for="changeHabit" class="block text-gray-700 font-medium mb-2">你觉得对方的哪些小习惯需要调整，会让你们更融洽？</label>
+                        <textarea id="changeHabit" name="changeHabit" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 第四部分：冲突与解决 -->
+            <div class="form-section bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 mb-8 transform transition-all duration-300 hover:shadow-2xl hover:bg-opacity-90">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-white rounded-full mr-2 text-sm">4</span>
+                    冲突与解决
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="conflictFrequency" class="block text-gray-700 font-medium mb-2">你们发生争执或不愉快的频率通常是？</label>
+                        <select id="conflictFrequency" name="conflictFrequency" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none appearance-none bg-white bg-no-repeat bg-right-4" style="background-image: url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css');">
+                            <option value="" disabled selected>请选择</option>
+                            <option value="rarely">很少发生</option>
+                            <option value="few-times-year">一年几次</option>
+                            <option value="few-times-month">一个月几次</option>
+                            <option value="weekly">每周都会发生</option>
+                            <option value="daily">几乎每天都会有小冲突</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="mainConflict" class="block text-gray-700 font-medium mb-2">你们之间最容易引发争执的“核心问题”通常是？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="mainConflict" value="money" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">财务分配/消费观念差异</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="mainConflict" value="family" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方家庭/亲友关系处理</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="mainConflict" value="work" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">工作/学业压力影响相处</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="mainConflict" value="trust" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">信任感/安全感不足引发猜忌</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="mainConflict" value="habits" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">生活习惯/作息差异冲突</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="mainConflict" value="other" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">其他原因</span>
+                            </label>
+                            <div id="otherConflictReason" class="hidden ml-6 mt-2">
+                                <textarea id="otherConflictText" name="otherConflictText" rows="2" placeholder="请说明具体原因..." class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="resolveConflict" class="block text-gray-700 font-medium mb-2">发生冲突后，你最希望对方采用怎样的解决方式？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="resolveConflict" value="calm" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">希望对方先和我各自冷静下来，之后一起理性复盘问题、互相致歉，共同把矛盾彻底解决</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="resolveConflict" value="one-side" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">希望对方愿意主动先做出妥协让步，先让氛围恢复平和，后续可以不用深究矛盾根源</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="resolveConflict" value="makeup" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">希望对方先用拥抱这类亲密行为安抚我的情绪，等双方情绪缓和后，再找合适时机一起梳理冲突问题</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="resolveConflict" value="silent" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">期待对方能主动破冰、率先开口打破僵持的局面</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="resolveConflict" value="escalate" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">希望对方克制情绪，不把冲突升级，不说伤人的话、不进行人身攻击，温和地和我沟通</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="conflictImpact" class="block text-gray-700 font-medium mb-2">冲突解决后，对你们后续关系的影响通常是？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="conflictImpact" value="stronger" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">解决问题后，我们的感情会变得更坚固</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="conflictImpact" value="unspoken" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">问题表面解决了，但彼此心里仍有隔阂、存在芥蒂</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="conflictImpact" value="anxious" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">下次遇到类似问题时，会感到紧张或刻意回避</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="conflictImpact" value="no-impact" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">基本没有影响，很快就会忘记冲突细节</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="improveConflict" class="block text-gray-700 font-medium mb-2">你觉得你们在“处理冲突”方面，最需要改进的地方是什么？</label>
+                        <textarea id="improveConflict" name="improveConflict" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 第五部分：价值观与未来规划 -->
+            <div class="form-section bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 mb-8 transform transition-all duration-300 hover:shadow-2xl hover:bg-opacity-90">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-white rounded-full mr-2 text-sm">5</span>
+                    价值观与未来规划
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="marriageView" class="block text-gray-700 font-medium mb-2">关于婚姻，你们的想法更接近以下哪一种？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="marriageView" value="no-discussion" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">完全没聊过婚姻相关内容，目前只专注熟悉彼此性格、生活习惯</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="marriageView" value="casual" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">偶尔闲聊各自理想的婚姻模样，仅泛泛分享婚恋观，没结合两人关系讨论</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="marriageView" value="core-values" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">会主动交流结婚底线、家庭期待等核心观念，试探双方婚恋理念是否匹配</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="marriageView" value="long-term" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">聊过长远恋爱节奏，一致认同婚姻是很久以后的事，现阶段不作规划</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="marriageView" value="one-side" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">其中一方提及自身结婚时间预期，会根据后续相处磨合再深入探讨婚事</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="financeView" class="block text-gray-700 font-medium mb-2">关于财务分配，你们的共识更接近以下哪一种？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="financeView" value="shared" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方收入完全公开，财产共享，共同规划支出</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="financeView" value="partial" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">部分收入共享，保留一部分个人支配空间</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="financeView" value="separate" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方经济独立，大部分支出AA制，有各自的财产规划</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="financeView" value="controlled" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">由其中一方主导和管理两个人的全部财务支出</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="financeView" value="no-consensus" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">目前没有达成完全的共识，正在摸索或存在争议</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="futureTravel" class="block text-gray-700 font-medium mb-2">关于“旅行/休闲生活”，你们的共识更接近以下哪一种？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="futureTravel" value="frequent" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方都喜欢旅行，每年都会安排至少一次长途或短途旅行</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="futureTravel" value="flexible" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">都觉得旅行不是必须的，更愿意在假期里放松休息或陪伴家人</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="futureTravel" value="compromise" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">一方喜欢旅行，另一方更喜欢宅在家，我们会互相妥协安排</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="futureTravel" value="no-plan" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">很少讨论旅行的话题，没有明确的偏好或详细计划</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="futureGrowth" class="block text-gray-700 font-medium mb-2">关于“个人成长与事业发展”，你们的共识更接近以下哪一种？</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="futureGrowth" value="support" required class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方会全力支持彼此的事业发展、学习计划或个人爱好</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="futureGrowth" value="prioritize" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">其中一方会以家庭生活为主，配合另一方的发展规划</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="futureGrowth" value="balance" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方都以家庭和感情为重，会优先选择能平衡生活的发展路径</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="futureGrowth" value="conflict" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-gray-700">双方的发展规划存在冲突，或一方不支持另一方的选择</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="mostImportant" class="block text-gray-700 font-medium mb-2">你认为，维持一段长久亲密关系，最重要的三个因素是什么？</label>
+                        <textarea id="mostImportant" name="mostImportant" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 第六部分：个人反馈与补充 -->
+            <div class="form-section bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 mb-8 transform transition-all duration-300 hover:shadow-2xl hover:bg-opacity-90">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-white rounded-full mr-2 text-sm">6</span>
+                    个人反馈与补充
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="whatYouGive" class="block text-gray-700 font-medium mb-2">你觉得自己在这段关系中，给予对方最重要的东西是什么？</label>
+                        <textarea id="whatYouGive" name="whatYouGive" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="whatYouReceive" class="block text-gray-700 font-medium mb-2">你觉得自己在这段关系中，从对方身上获得最重要的东西是什么？</label>
+                        <textarea id="whatYouReceive" name="whatYouReceive" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="whatToImprove" class="block text-gray-700 font-medium mb-2">如果可以让这段关系变得更好，你希望自己做出哪些改变？</label>
+                        <textarea id="whatToImprove" name="whatToImprove" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label for="partnerToImprove" class="block text-gray-700 font-medium mb-2">如果可以让这段关系变得更好，你希望伴侣做出哪些改变？</label>
+                        <textarea id="partnerToImprove" name="partnerToImprove" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label for="relationshipWish" class="block text-gray-700 font-medium mb-2">最后，写下你对这段关系的期望吧！</label>
+                        <textarea id="relationshipWish" name="relationshipWish" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all duration-300 outline-none resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 提交按钮区域 -->
+            <div class="text-center">
+                <button type="submit" id="submit-btn" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:from-primary hover:to-secondary text-white font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                    <i class="fa fa-paper-plane mr-2"></i>提交调查问卷
+                </button>
+            </div>
+        </form>
+        <!-- 提交中 loading 蒙层 -->
+        <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg p-6 flex flex-col items-center">
+                <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="text-gray-800">正在提交问卷...</p>
+            </div>
+        </div>
+        <!-- 提交成功提示弹窗 -->
+        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="success-modal-content">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-check text-green-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">问卷提交成功</h3>
+                    <p class="text-gray-600 mb-6">感谢你的参与，祝你和伴侣生活愉快！</p>
+                    <button type="button" id="close-success" class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-300">
+                        关闭提示
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 提交失败提示弹窗 -->
+        <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="error-modal-content">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-exclamation-triangle text-red-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">问卷提交失败</h3>
+                    <p class="text-gray-600 mb-6" id="error-message">发送失败，请稍后再试。</p>
+                    <button type="button" id="close-error" class="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-300">
+                        关闭提示
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 页脚版权信息 -->
+        <div class="text-center mt-12 text-gray-500 text-sm">
+            <p>© 2025 情侣深度调查问卷 保留所有权利</p>
+        </div>
+    </div>
+    <!-- 引入EmailJS官方SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化EmailJS配置
+            (function() {
+                emailjs.init({
+                    publicKey: "_TrhRegm42Ml09yvo",
+                });
+            })();
+            // 获取页面中所有DOM元素
+            const surveyForm = document.getElementById('coupleSurveyForm');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const successModal = document.getElementById('success-modal');
+            const errorModal = document.getElementById('error-modal');
+            const closeSuccessBtn = document.getElementById('close-success');
+            const closeErrorBtn = document.getElementById('close-error');
+            const errorMessage = document.getElementById('error-message');
+            // 实时更新问卷填写进度
+            function updateProgress() {
+                const requiredFields = surveyForm.querySelectorAll('[required]');
+                let completedFields = 0;
+                
+                requiredFields.forEach(field => {
+                    if (field.type === 'radio') {
+                        const radioGroup = surveyForm.querySelectorAll(`[name="${field.name}"]`);
+                        let isChecked = false;
+                        radioGroup.forEach(radio => {
+                            if (radio.checked) isChecked = true;
+                        });
+                        if (isChecked) completedFields++;
+                    } else {
+                        if (field.value.trim() !== '') completedFields++;
+                    }
+                });
+                
+                // 计算进度百分比
+                const uniqueRequiredNames = new Set();
+                requiredFields.forEach(field => {
+                    if (field.type === 'radio') {
+                        uniqueRequiredNames.add(field.name);
+                    } else {
+                        uniqueRequiredNames.add(field.id);
+                    }
+                });
+                
+                const totalFields = uniqueRequiredNames.size;
+                const progress = totalFields > 0 ? (completedFields / totalFields) * 100 : 0;
+                
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}%`;
+            }
+            // 绑定输入事件，实时更新进度
+            const formFields = surveyForm.querySelectorAll('input, select, textarea');
+            formFields.forEach(field => {
+                field.addEventListener('input', updateProgress);
+                if (field.type === 'radio') {
+                    field.addEventListener('change', updateProgress);
+                }
+            });
+            // 其他原因文本框显示/隐藏逻辑
+            const mainConflictRadios = surveyForm.querySelectorAll('input[name="mainConflict"]');
+            const otherConflictReason = document.getElementById('otherConflictReason');
+            const otherConflictText = document.getElementById('otherConflictText');
+            mainConflictRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'other') {
+                        otherConflictReason.classList.remove('hidden');
+                    } else {
+                        otherConflictReason.classList.add('hidden');
+                        otherConflictText.value = '';
+                    }
+                });
+            });
+            // 表单提交逻辑
+            surveyForm.addEventListener('submit', function(event) {
+                // 阻止默认表单跳转提交
+                event.preventDefault();
+                
+                // 显示加载中蒙层
+                loadingOverlay.classList.remove('hidden');
+                // 收集问卷数据，与EmailJS模板变量一一对应
+                const templateParams = {
+                    partner1Name: document.getElementById('partner1Name').value,
+                    partner2Name: document.getElementById('partner2Name').value,
+                    relationshipDuration: document.getElementById('relationshipDuration').value,
+                    loveLanguage: document.querySelector('input[name="loveLanguage"]:checked').value,
+                    communicationFrequency: document.getElementById('communicationFrequency').value,
+                    shareFeelings: document.querySelector('input[name="shareFeelings"]:checked').value,
+                    partnerResponse: document.querySelector('input[name="partnerResponse"]:checked').value,
+                    relationshipStrength: document.getElementById('relationshipStrength').value,
+                    improveCommunication: document.getElementById('improveCommunication').value,
+                    spendTimeTogether: document.querySelector('input[name="spendTimeTogether"]:checked').value,
+                    dailyRoutine: document.querySelector('input[name="dailyRoutine"]:checked').value,
+                    dealWithAnnoying: document.querySelector('input[name="dealWithAnnoying"]:checked').value,
+                    favoriteMoment: document.getElementById('favoriteMoment').value,
+                    changeHabit: document.getElementById('changeHabit').value,
+                    conflictFrequency: document.getElementById('conflictFrequency').value,
+                    mainConflict: document.querySelector('input[name="mainConflict"]:checked').value,
+                    resolveConflict: document.querySelector('input[name="resolveConflict"]:checked').value,
+                    conflictImpact: document.querySelector('input[name="conflictImpact"]:checked').value,
+                    improveConflict: document.getElementById('improveConflict').value,
+                    marriageView: document.querySelector('input[name="marriageView"]:checked').value,
+                    financeView: document.querySelector('input[name="financeView"]:checked').value,
+                    futureTravel: document.querySelector('input[name="futureTravel"]:checked').value,
+                    futureGrowth: document.querySelector('input[name="futureGrowth"]:checked').value,
+                    mostImportant: document.getElementById('mostImportant').value,
+                    whatYouGive: document.getElementById('whatYouGive').value,
+                    whatYouReceive: document.getElementById('whatYouReceive').value,
+                    whatToImprove: document.getElementById('whatToImprove').value,
+                    partnerToImprove: document.getElementById('partnerToImprove').value,
+                    relationshipWish: document.getElementById('relationshipWish').value,
+                };
+                // 调用EmailJS发送邮件
+                emailjs.send("service_wzwbsgk", "template_9nkt9ls", templateParams)
+                    .then(function(response) {
+                        // 提交成功处理
+                        loadingOverlay.classList.add('hidden');
+                        successModal.classList.remove('hidden');
+                        setTimeout(() => {
+                            document.getElementById('success-modal-content').classList.remove('scale-95', 'opacity-0');
+                        }, 10);
+                    })
+                    .catch(function(error) {
+                        // 提交失败处理
+                        loadingOverlay.classList.add('hidden');
+                        errorModal.classList.remove('hidden');
+                        setTimeout(() => {
+                            document.getElementById('error-modal-content').classList.remove('scale-95', 'opacity-0');
+                        }, 10);
+                        // 控制台输出错误日志，方便排查
+                        console.error('EmailJS发送失败:', error);
+                        errorMessage.textContent = `提交失败，错误信息：${error.text || '请检查网络或稍后再试。'}`;
+                    });
+            });
+            // 关闭成功弹窗
+            closeSuccessBtn.addEventListener('click', function() {
+                successModal.classList.add('hidden');
+            });
+            // 关闭失败弹窗
+            closeErrorBtn.addEventListener('click', function() {
+                errorModal.classList.add('hidden');
+            });
+            // 初始化进度条
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
